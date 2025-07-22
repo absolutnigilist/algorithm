@@ -1,6 +1,15 @@
 #pragma once
 #include<iostream>
+#include <random>
+#include <algorithm>
+#include <cstddef>
 
+void generate_random_array(int arr[], size_t size) {
+	std::random_device rd;  // Получаем случайное число от устройства
+	std::mt19937 gen(rd()); // Инициализируем генератор случайных чисел
+	std::uniform_int_distribution<> distrib(0, 99);
+	std::generate(arr, arr + size, [&]() {return distrib(gen); });
+}
 //---Сортировка выбором
 void sort_choice(int ar[], size_t size_ar) {
 	for (size_t i = 0; i < size_ar-1; i++)
@@ -93,7 +102,46 @@ void sort_buble(int ar[], size_t size_ar) {
 		 quickSort(arr, pivot + 1, high);
 	 }
  }
-//---Печать массива
+ //---Функция для преобразования поддерева в двоичную кучу
+ void heapify(int arr[], int n, int i) {
+	 int largest = i; //---Инициализируем наибольший элемент как корень
+	 const int left = 2 * i + 1;
+	 const int right = 2 * i + 2;
+	 //---Если левый дочерний элемент больше корня
+	 if (left < n && arr[left] > arr[largest])
+	 {
+		 largest = left;
+	 }
+	 //---Если правый дочерний элемент больге корня
+	 if (right < n && arr[right]> arr[largest])
+	 {
+		 largest = right;
+	 }
+	 //---Если наибольший элемент не корень
+	 if (largest != i)
+	 {
+		 std::swap(arr[i], arr[largest]);
+		 //---Рекурсивно преобразуем в двоичную кучу затронутое поддерево
+		 heapify(arr, n, largest);
+	 }
+ }
+ //---Heap сортировка
+ void heapSort(int arr[], size_t size) {
+	 //---Построение кучи (перегруппируем массив)
+	 for (int i = size/2 - 1; i >= 0; i--)
+	 {
+		 heapify(arr, size, i);
+	 }
+	 //---Один за другим извлекаем элементы из кучи
+	 for (int i = size - 1; i > 0; i--)
+	 {
+		 //---Перемещаем текущий корень в конец
+		 std::swap(arr[0], arr[i]);
+		 //---Вызываем heapify на уменьшенной куче
+		 heapify(arr, i, 0);
+	 }
+ }
+ //---Печать массива
 void print(int ar[], size_t size_ar) {
 	
 	for (size_t i = 0; i < size_ar; i++)
@@ -108,6 +156,7 @@ void print(int ar[], size_t size_ar) {
 		}
 		
 	}
+	std::cout << std::endl;
 }
 
 //---Рекурсивная функция сложения элементов массива

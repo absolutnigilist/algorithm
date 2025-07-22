@@ -1,10 +1,68 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "header.h"
+#include"Header1.h"
 #include <cstdio>
+#include <chrono>
+
+#define START auto start = std::chrono::high_resolution_clock::now();
+#define END																			   \
+auto end = std::chrono::high_resolution_clock::now();								   \
+std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()\
+<<" microseconds" <<std::endl;
+#define SORT_TYPE(TYPE) std::cout<< TYPE <<std::endl;
 
 int main() {
+	{
+		SORT_TYPE("//---Bubble sort, time complexity O(N)")
+		const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		bubble(array, SIZE);
+		END
+		delete[] array;
+	}
+	{
+		SORT_TYPE("//---Choice sort, time complexity O(N)")
+		const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		choice(array, SIZE);
+		END
+		delete[] array;
+	}
+	{
+		SORT_TYPE("//---Hoare sort, time complexity O(logN)")
+		const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		hoare(array, 0, SIZE-1);
+		END
+		delete[] array;
+	}
+	{
+		SORT_TYPE("//---Quick sort, time complexity O(logN)")
+		const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		quick(array, 0, SIZE - 1);
 	
-	int arr[] = { 10,11,25,1,3,66,22,15,10,1,28,35,13 };
+		END
+		delete[] array;
+	}
+	
+	
+	
+	
+	
+	
+	
+
+	
+ 	int arr[] = { 10,11,25,1,3,66,22,15,10,1,28,35,13 };
 	int size_array = sizeof(arr) / sizeof(arr[0]);
 
 	sort_choice(arr, size_array);
