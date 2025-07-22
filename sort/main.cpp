@@ -1,6 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "header.h"
-#include"Header1.h"
 #include <cstdio>
 #include <chrono>
 
@@ -58,7 +57,7 @@ int main() {
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
 		START
-		quickSort(array, 0, SIZE - 1);
+		quickSort(array, 0, SIZE - 1);.07
 		END
 		delete[] array;
 	}
