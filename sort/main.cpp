@@ -18,7 +18,7 @@ int main() {
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
 		START
-		bubble(array, SIZE);
+		sort_buble(array, SIZE);
 		END
 		delete[] array;
 	}
@@ -28,7 +28,7 @@ int main() {
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
 		START
-		choice(array, SIZE);
+		sort_choice(array, SIZE);
 		END
 		delete[] array;
 	}
@@ -38,7 +38,17 @@ int main() {
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
 		START
-		hoare(array, 0, SIZE-1);
+		qsortHoare(array, 0, SIZE-1);
+		END
+		delete[] array;
+	}
+	{
+		SORT_TYPE("//---Hoare sort mit teil optimization, time complexity O(logN)")
+			const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		qsortHoareTailRecursive(array, 0, SIZE - 1);
 		END
 		delete[] array;
 	}
@@ -48,8 +58,7 @@ int main() {
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
 		START
-		quick(array, 0, SIZE - 1);
-	
+		quickSort(array, 0, SIZE - 1);
 		END
 		delete[] array;
 	}

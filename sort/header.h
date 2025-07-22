@@ -4,6 +4,12 @@
 #include <algorithm>
 #include <cstddef>
 
+void swap(int& a, int& b) {
+	int temp = a;
+	a = b;
+	b = temp;
+}
+
 void generate_random_array(int arr[], size_t size) {
 	std::random_device rd;  // Получаем случайное число от устройства
 	std::mt19937 gen(rd()); // Инициализируем генератор случайных чисел
@@ -46,36 +52,66 @@ void sort_buble(int ar[], size_t size_ar) {
 	}
 
 }
-//---Быстрая сортировка Хоара
- void qsortHoare(int arr[], int left, int right) {
-	if (left >= right)
+//---Быстрая сортировка Хоара с простой рекурсией
+void qsortHoare(int arr[], int l, int r) {
+	if (l >= r)
 	{
 		return;
 	}
-	int mid = arr[left + (right - left)/2];
-	int i = left;
-	int j = right;
+	int mid = arr[l + (r - l) / 2];
+	int left = l;
+	int right = r;
 
 	do
 	{
-		while (arr[i] < mid) ++i;
-		while (arr[j] > mid) --j;
-		
-		if (i <= j)
-		{
-			int tmp = arr[i];
-			arr[i] = arr[j];
-			arr[j] = tmp;
-			++i;
-			--j;
-		}
-	} while (i <= j);
+		while (arr[left] < mid) ++left;
+		while (arr[right] > mid) --right;
 
-	qsortHoare(arr, left, j);
-	qsortHoare(arr, i, right);
+		if (left <= right)
+		{
+			int tmp = arr[left];
+			arr[left] = arr[right];
+			arr[right] = tmp;
+			++left;
+			--right;
+		}
+	} while (left <= right);
+
+	qsortHoare(arr, l, right);
+	qsortHoare(arr, left, r);
 }
-//---Функция получения pivot для quickSort
- int partition (int arr[], int low, int high){
+ //---Быстрая сортировка Хоара с оптимизированной хвостовой рекурсией
+void qsortHoareTailRecursive(int arr[], int l, int r) {
+	while (l < r) {
+		int pivot = arr[l + (r - l) / 2];
+		int left = l;
+		int right = r;
+
+		while (left <= right)
+		{
+			while (arr[left] < pivot)++left;
+			while (arr[right] > pivot) --right;
+			if (left <= right)
+			{
+				swap(arr[left], arr[right]);
+				++left;
+				--right;
+			}
+		}
+		if (right - l < r - left)
+		{
+			qsortHoareTailRecursive(arr, l, right);
+			l = left;
+		}
+		else
+		{
+			qsortHoareTailRecursive(arr, left, r);
+			r = right;
+		}
+	}
+}
+//---Функция получения pivot для quickSort (Lomuto partition)
+int partition (int arr[], int low, int high){
 	 int pivot = arr[high];
 	 int i = (low - 1);
 	 for (size_t j = low; j < high; j++)
@@ -93,60 +129,60 @@ void sort_buble(int ar[], size_t size_ar) {
 	 arr[high] = temp;
 	 return (i + 1);
 	 };
- //---Быстрая сортировка опорным послежним элементом
- void quickSort(int arr[], int low, int high) {
+//---Быстрая сортировка опорным послежним элементом
+void quickSort(int arr[], int low, int high) {
 	 if (low < high)
 	 {
 		 int pivot = partition(arr, low, high);
 		 quickSort(arr, low, pivot - 1);
 		 quickSort(arr, pivot + 1, high);
 	 }
- }
- //---Функция для преобразования поддерева в двоичную кучу
- void heapify(int arr[], int n, int i) {
-	 int largest = i; //---Инициализируем наибольший элемент как корень
-	 const int left = 2 * i + 1;
-	 const int right = 2 * i + 2;
-	 //---Если левый дочерний элемент больше корня
-	 if (left < n && arr[left] > arr[largest])
-	 {
-		 largest = left;
-	 }
-	 //---Если правый дочерний элемент больге корня
-	 if (right < n && arr[right]> arr[largest])
-	 {
-		 largest = right;
-	 }
-	 //---Если наибольший элемент не корень
-	 if (largest != i)
-	 {
-		 std::swap(arr[i], arr[largest]);
-		 //---Рекурсивно преобразуем в двоичную кучу затронутое поддерево
-		 heapify(arr, n, largest);
-	 }
- }
- //---Heap сортировка
- void heapSort(int arr[], size_t size) {
-	 //---Построение кучи (перегруппируем массив)
-	 for (int i = size/2 - 1; i >= 0; i--)
-	 {
-		 heapify(arr, size, i);
-	 }
-	 //---Один за другим извлекаем элементы из кучи
-	 for (int i = size - 1; i > 0; i--)
-	 {
-		 //---Перемещаем текущий корень в конец
-		 std::swap(arr[0], arr[i]);
-		 //---Вызываем heapify на уменьшенной куче
-		 heapify(arr, i, 0);
-	 }
- }
- //---Печать массива
+}
+//---Функция для преобразования поддерева в двоичную кучу
+void heapify(int arr[], int n, int i) {
+	int largest = i; //---Инициализируем наибольший элемент как корень
+	const int left = 2 * i + 1;
+	const int right = 2 * i + 2;
+	//---Если левый дочерний элемент больше корня
+	if (left < n && arr[left] > arr[largest])
+	{
+		largest = left;
+	}
+	//---Если правый дочерний элемент больге корня
+	if (right < n && arr[right]> arr[largest])
+	{
+		largest = right;
+	}
+	//---Если наибольший элемент не корень
+	if (largest != i)
+	{
+		std::swap(arr[i], arr[largest]);
+		//---Рекурсивно преобразуем в двоичную кучу затронутое поддерево
+		heapify(arr, n, largest);
+	}
+}
+//---Heap сортировка
+void heapSort(int arr[], size_t size) {
+	//---Построение кучи (перегруппируем массив)
+	for (int i = size / 2 - 1; i >= 0; i--)
+	{
+		heapify(arr, size, i);
+	}
+	//---Один за другим извлекаем элементы из кучи
+	for (int i = size - 1; i > 0; i--)
+	{
+		//---Перемещаем текущий корень в конец
+		std::swap(arr[0], arr[i]);
+		//---Вызываем heapify на уменьшенной куче
+		heapify(arr, i, 0);
+	}
+}
+//---Печать массива
 void print(int ar[], size_t size_ar) {
-	
+
 	for (size_t i = 0; i < size_ar; i++)
 	{
-		if (i!=size_ar-1)
+		if (i != size_ar - 1)
 		{
 			std::cout << ar[i] << ", ";
 		}
@@ -154,7 +190,7 @@ void print(int ar[], size_t size_ar) {
 		{
 			std::cout << ar[i];
 		}
-		
+
 	}
 	std::cout << std::endl;
 }
