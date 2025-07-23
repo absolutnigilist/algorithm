@@ -12,7 +12,7 @@ std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).
 
 int main() {
 	{
-		SORT_TYPE("//---Bubble sort, time complexity O(N)")
+		SORT_TYPE("//---Bubble sort, time complexity best O(n), mid O(n^2), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -22,7 +22,7 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Choice sort, time complexity O(N)")
+		SORT_TYPE("//---Choice sort, time complexity best O(n^2), mid O(n^2), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -32,7 +32,17 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Hoare sort, time complexity O(logN)")
+		SORT_TYPE("//---Insert sort, time complexity best O(n), mid O(n^2), worst O(n^2)")
+		const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		sort_insert(array, SIZE);
+		END
+		delete[] array;
+	}
+	{
+		SORT_TYPE("//---Hoare sort, time complexity best O(log n), mid O(log n), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -42,8 +52,8 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Hoare sort mit teil optimization, time complexity O(logN)")
-			const int SIZE = 10'000;
+		SORT_TYPE("//---Hoare sort mit teil optimization, time complexity O(log n), mid O(log n), worst O(n^2)")
+		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
 		START
@@ -52,12 +62,12 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Quick sort, time complexity O(logN)")
+		SORT_TYPE("//---Quick sort, time complexityO(log n), mid O(log n), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
 		START
-		quickSort(array, 0, SIZE - 1);.07
+		quickSort(array, 0, SIZE - 1);
 		END
 		delete[] array;
 	}

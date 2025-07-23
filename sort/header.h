@@ -17,40 +17,55 @@ void generate_random_array(int arr[], size_t size) {
 	std::generate(arr, arr + size, [&]() {return distrib(gen); });
 }
 //---Сортировка выбором
-void sort_choice(int ar[], size_t size_ar) {
-	for (size_t i = 0; i < size_ar-1; i++)
+void sort_choice(int arr[], size_t size) {
+	for (size_t i = 0; i < size-1; i++)
 	{
 		int min_index = i;
-		for (size_t j = i+1; j < size_ar; j++)
+		for (size_t j = i+1; j < size; j++)
 		{
-			if (ar[j]<ar[min_index])
+			if (arr[j]<arr[min_index])
 			{
 				min_index = j;
 			}
 		}
 		if (min_index!=i)
 		{
-			int tmp = ar[i];
-			ar[i] = ar[min_index];
-			ar[min_index] = tmp;
+			int tmp = arr[i];
+			arr[i] = arr[min_index];
+			arr[min_index] = tmp;
 		}
+	}
+}
+//---Сортировка вставками
+void sort_insert(int arr[], size_t size) {
+	for (size_t i = 1; i < size; i++)
+	{
+		int key = arr[i];
+		int j = i - 1;
+		while (j>=0 && arr[j]> key) {
+			arr[j + 1] = arr[j];
+			--j;
+		};
+		arr[j + 1] = key;
 	}
 }
 //---Пузырьковая сортировка
 void sort_buble(int ar[], size_t size_ar) {
+	bool swapped = false;
 	for (size_t i = 0; i < size_ar-1; i++)
 	{
 		for (size_t j = i+1; j < size_ar; j++)
 		{
-			if (ar[j]>ar[i])
+			if (ar[j]<ar[i])
 			{
 				int tmp = ar[j];
 				ar[j] = ar[i];
 				ar[i] = tmp;
+				swapped = true;
 			}
 		}
+		if (!swapped) break;
 	}
-
 }
 //---Быстрая сортировка Хоара с простой рекурсией
 void qsortHoare(int arr[], int l, int r) {
@@ -177,6 +192,50 @@ void heapSort(int arr[], size_t size) {
 		heapify(arr, i, 0);
 	}
 }
+//---—Сортировка сли¤нием
+void merge(int* array, int l, int m, int r) {
+	const int n1 = m - l + 1;
+	const int n2 = r - m;
+	int* L = new int[n1];
+	int* R = new int[n2];
+
+	for (size_t i = 0; i < n1; i++)
+	{
+		L[i] = array[l + i];
+	}
+	for (size_t i = 0; i < n2; i++)
+	{
+		R[i] = array[m + 1 + i];
+	}
+	int i = 0;
+	int j = 0;
+	int k = l;
+	while (i < n1 && j < n2)
+	{
+		array[k++] = (L[i] < R[j]) ? L[i++] : R[j++];
+	}
+	while (i < n1) {
+		array[k++] = L[i++];
+	}
+	while (j < n2)
+	{
+		array[k++] = R[j++];
+	}
+	delete[] L;
+	delete[] R;
+}
+void mergeSort(int* array, int l, int r) {
+	if (l < r)
+	{
+		int m = l + (r - l) / 2;
+		mergeSort(array, l, m);
+		mergeSort(array, m + 1, r);
+		merge(array, l, m, r);
+	}
+
+}
+
+
 //---Печать массива
 void print(int ar[], size_t size_ar) {
 
