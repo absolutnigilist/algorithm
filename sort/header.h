@@ -192,45 +192,47 @@ void heapSort(int arr[], size_t size) {
 		heapify(arr, i, 0);
 	}
 }
-//---—Сортировка сли¤нием
-void merge(int* array, int l, int m, int r) {
-	const int n1 = m - l + 1;
-	const int n2 = r - m;
-	int* L = new int[n1];
-	int* R = new int[n2];
+//---—Сортировка слиянием
+void merge(int* array, int left, int mid, int right) {
+	const int sizeLeft = mid - left + 1;
+	const int sizeRight = right - mid;
+	int* leftArray = new int[sizeLeft];
+	int* rightArray = new int[sizeRight];
 
-	for (size_t i = 0; i < n1; i++)
+	for (size_t i = 0; i < sizeLeft; i++)
 	{
-		L[i] = array[l + i];
+		leftArray[i] = array[left + i];
 	}
-	for (size_t i = 0; i < n2; i++)
+	for (size_t i = 0; i < sizeRight; i++)
 	{
-		R[i] = array[m + 1 + i];
+		rightArray[i] = array[mid + 1 + i];
 	}
-	int i = 0;
-	int j = 0;
-	int k = l;
-	while (i < n1 && j < n2)
+	int indexLeft = 0;
+	int indexRight = 0;
+	int indexMerged = left;
+	while (indexLeft < sizeLeft && indexRight < sizeRight)
 	{
-		array[k++] = (L[i] < R[j]) ? L[i++] : R[j++];
+		array[indexMerged++] = (leftArray[indexLeft] < rightArray[indexRight]) 
+			? leftArray[indexLeft++] 
+			: rightArray[indexRight++];
 	}
-	while (i < n1) {
-		array[k++] = L[i++];
+	while (indexLeft < sizeLeft) {
+		array[indexMerged++] = leftArray[indexLeft++];
 	}
-	while (j < n2)
+	while (indexRight < sizeRight)
 	{
-		array[k++] = R[j++];
+		array[indexMerged++] = rightArray[indexRight++];
 	}
-	delete[] L;
-	delete[] R;
+	delete[] leftArray;
+	delete[] rightArray;
 }
-void mergeSort(int* array, int l, int r) {
-	if (l < r)
+void mergeSort(int* array, int left, int right) {
+	if (left < right)
 	{
-		int m = l + (r - l) / 2;
-		mergeSort(array, l, m);
-		mergeSort(array, m + 1, r);
-		merge(array, l, m, r);
+		int mid = left + (right - left) / 2;
+		mergeSort(array, left, mid);
+		mergeSort(array, mid + 1, right);
+		merge(array, left, mid, right);
 	}
 
 }
