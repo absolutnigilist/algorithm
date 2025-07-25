@@ -82,11 +82,6 @@ int main() {
 		delete[] array;
 	}
 	
-	
-	
-	
-
-	
  	int arr[] = { 10,11,25,1,3,66,22,15,10,1,28,35,13 };
 	int size_array = sizeof(arr) / sizeof(arr[0]);
 
