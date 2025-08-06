@@ -8,11 +8,21 @@
 auto end = std::chrono::high_resolution_clock::now();								   \
 std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()\
 <<" microseconds" <<std::endl;
-#define SORT_TYPE(TYPE) std::cout<< TYPE <<std::endl;
+#define CONTEXT(TYPE) std::cout<< TYPE <<std::endl;
 
 int main() {
 	{
-		SORT_TYPE("//---Bubble sort, time complexity best O(n), mid O(n^2), worst O(n^2)")
+		CONTEXT("//---Shake sort, time complexity best O(n), mid O(n^2), worst O(n^2)")
+			const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+			sort_shake(array, SIZE);
+		END
+			delete[] array;
+	}
+	{
+		CONTEXT("//---Bubble sort, time complexity best O(n), mid O(n^2), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -22,7 +32,7 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Choice sort, time complexity best O(n^2), mid O(n^2), worst O(n^2)")
+		CONTEXT("//---Choice sort, time complexity best O(n^2), mid O(n^2), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -32,7 +42,7 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Insert sort, time complexity best O(n), mid O(n^2), worst O(n^2)")
+		CONTEXT("//---Insert sort, time complexity best O(n), mid O(n^2), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -42,7 +52,7 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Hoare sort, time complexity best O(log n), mid O(log n), worst O(n^2)")
+		CONTEXT("//---Hoare sort, time complexity best O(log n), mid O(log n), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -52,7 +62,7 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Hoare sort mit teil optimization, time complexity O(log n), mid O(log n), worst O(n^2)")
+		CONTEXT("//---Hoare sort mit teil optimization, time complexity O(log n), mid O(log n), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -62,7 +72,7 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Quick sort, time complexityO(log n), mid O(log n), worst O(n^2)")
+		CONTEXT("//---Quick sort, time complexityO(log n), mid O(log n), worst O(n^2)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -72,7 +82,7 @@ int main() {
 		delete[] array;
 	}
 	{
-		SORT_TYPE("//---Merge sort, time complexityO(log n), mid O(log n), worst O(log n)")
+		CONTEXT("//---Merge sort, time complexityO(log n), mid O(log n), worst O(log n)")
 		const int SIZE = 10'000;
 		int* array = new int[SIZE];
 		generate_random_array(array, SIZE);
@@ -81,49 +91,55 @@ int main() {
 		END
 		delete[] array;
 	}
+	{
+		CONTEXT("//---Sum of array by recursive function")
+		const int SIZE = 1'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		int total = recursiveSumm(array, SIZE);
+		END
+		delete[] array;
+	}
+	{
+		CONTEXT("//---Sum of array by iterative function")
+		const int SIZE = 1'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		int total = iterativeSumm(array, SIZE);
+		END
+		delete[] array;
+	}
+	{
+		CONTEXT("//---Binary search in sorted array in ascending order of array by iterative function")
+		const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		qsortHoare(array, 0, SIZE - 1);
+		START
+		bool isFound = bin_search(array, SIZE, 13);
+		END
+		delete[] array;
 	
- 	int arr[] = { 10,11,25,1,3,66,22,15,10,1,28,35,13 };
-	int size_array = sizeof(arr) / sizeof(arr[0]);
-
-	sort_choice(arr, size_array);
-	print(arr, size_array);
-	std::cout << std::endl;
-
-	sort_buble(arr, size_array);
-	print(arr, size_array);
-	std::cout << std::endl;
-
 	
-	qsortHoare(arr, 0, (sizeof(arr) / sizeof(arr[0]) - 1));
-	print(arr, size_array);
-	std::cout << std::endl;
-
-	quickSort(arr, 0, (sizeof(arr) / sizeof(arr[0]) - 1));
-	print(arr, size_array);
-
-	int total = recursiveSumm(arr, size_array);
-	std::cout << std::endl;
-
-	bool flag = bin_search(arr, size_array, 13);
-	std::cout << flag;
-
-	std::cout << std::endl;
-
-	int arrr[] = { 1,5,6,9,8,0 };
-
-	int* ptr = Min(arrr, sizeof(arrr) / sizeof(arrr[0]));
-
-	int ar_simp[] = {2,15,9,13,17,18};
-	int ar_simp2[] = {2,15,9,13,17,18 };
-
-	Simplex_Input(ar_simp, sizeof(ar_simp) / sizeof((ar_simp[0])));
-	Shake(ar_simp2, sizeof(ar_simp2) / sizeof(ar_simp2[0]));
-	
+	}
+	{
+		CONTEXT("//---Returns a pointer to the minimum element in the array ar[]")
+		const int SIZE = 10'000;
+		int* array = new int[SIZE];
+		generate_random_array(array, SIZE);
+		START
+		int* isMin = Min(array, SIZE);
+		END
+		delete[] array;
+	}
 
 	int ar2[][4] = {
 		{1,2,3,4},
 		{5,6,7,8},
-		{9,10,11,12} };
+		{9,10,11,12} 
+	};
 	
 	int(*int_ptr)[4] = ar2;
 

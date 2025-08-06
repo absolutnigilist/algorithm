@@ -16,6 +16,39 @@ void generate_random_array(int arr[], size_t size) {
 	std::uniform_int_distribution<> distrib(0, 99);
 	std::generate(arr, arr + size, [&]() {return distrib(gen); });
 }
+//---Шейкерная сортировка
+void sort_shake(int arr[], size_t size) {
+	int left = 0;
+	int right = size - 1;
+	bool swapped = true;
+
+	while (left < right&& swapped)
+	{
+		swapped = false;
+		//---Проход слева направо
+		for (size_t i = left; i < right; i++)
+		{
+			if (arr[i] > arr[i + 1])
+			{
+				swap(arr[i], arr[i + 1]);
+				swapped = true;
+			}
+		}
+		//---Сдвигаем правую границу
+		right--;
+		//---Проход справа налево
+		for (size_t i = right; i > left; i--)
+		{
+			if (arr[i - 1] > arr[i])
+			{
+				swap(arr[i], arr[i - 1]);
+				swapped = true;
+			}
+		}
+		//---Сдвигаем левую границу
+		left++;
+	}
+}
 //---Сортировка выбором
 void sort_choice(int arr[], size_t size) {
 	for (size_t i = 0; i < size-1; i++)
@@ -58,15 +91,14 @@ void sort_buble(int ar[], size_t size_ar) {
 		{
 			if (ar[j]<ar[i])
 			{
-				int tmp = ar[j];
-				ar[j] = ar[i];
-				ar[i] = tmp;
+				swap(ar[j], ar[i]);
 				swapped = true;
 			}
 		}
 		if (!swapped) break;
 	}
 }
+
 //---Быстрая сортировка Хоара с простой рекурсией
 void qsortHoare(int arr[], int l, int r) {
 	if (l >= r)
@@ -237,7 +269,6 @@ void mergeSort(int* array, int left, int right) {
 
 }
 
-
 //---Печать массива
 void print(int ar[], size_t size_ar) {
 
@@ -257,33 +288,48 @@ void print(int ar[], size_t size_ar) {
 }
 
 //---Рекурсивная функция сложения элементов массива
- int recursiveSumm(int arr[], size_t size) {
+ [[nodiscard]]int recursiveSumm(int arr[], size_t size) {
 	if (!size)
 	{
 		return 0;
 	}
 	return	arr[size-1]+recursiveSumm(arr, size-1);
 	
-}
- 
- bool bin_search(int arr[], size_t size_ar, int sample) {
-	 int left = 0, right = size_ar - 1;
-	 int middle = (right - left) / 2;
-	 while (left < right)
+ }
+ //---Итеративная функция сложения элементов массива
+ [[nodiscard]] int iterativeSumm(int arr[], size_t size) {
+	 int result = 0;
+	 for (size_t i = 0; i < size; i++)
 	 {
-		 if (arr[middle] == sample) break;
-		 else if (sample < arr[middle])
+		 result += arr[i];
+	 }
+	 return result;
+ }
+ //---Реализация бинарного поиска в отсортированном по возрастанию массиве
+ bool bin_search(int arr[], size_t size_ar, int sample) {
+	 
+	 int left = 0, right = size_ar - 1;
+	 
+	 while (left <= right)
+	 {
+		 int middle = left + (right - left) / 2;
+
+		 if (arr[middle] == sample) 
 		 {
-			 left = middle + 1;
+			 return true;
 		 }
-		 else
+		 else if (sample < arr[middle])
 		 {
 			 right = middle - 1;
 		 }
+		 else
+		 {
+			 left = middle + 1;
+		 }
 	 }
-	 if (sample == arr[middle]) return 1;
+	 return false;
  }
- 
+ //---Функция возвращает указатель на минимальный элемент массива
  int* Min(int *ar, size_t size_ar) {
 	 int min=0;
 	 for (size_t i = 0; i <size_ar; i++)
@@ -294,50 +340,4 @@ void print(int ar[], size_t size_ar) {
 
  }
 
- void Simplex_Input(int arr[], size_t size) {
  
-	 for (size_t i = 1; i < size-1; i++)
-	 {
-		 int tmp = arr[i];
-		 for (size_t j = 0; j < i; j++)
-		 {
-			 if (tmp<arr[j])
-			 {
-				 for (size_t k = i; k > j; k--)
-				 {
-					 arr[k] = arr[k - 1];
-				 }
-				 arr[j] = tmp;
-				 break;
-			 }
-		 }
-	 }
- }
-
- void Shake(int arr[], size_t size) {
-	 int left = 0;
-	 int right = size - 1;
-	 while (left<right)
-	 {
-		 for (size_t i = left; i < right; i++)
-		 {
-			 if (arr[i]>arr[i+1])
-			 {
-				 int tmp = arr[i];
-				 arr[i] = arr[i + 1];
-				 arr[i + 1] = tmp;
-			 }
-		 }
-		 right--;
-		 for (size_t i = right; i >left ; i--)
-		 {
-			 if (arr[i-1]>arr[i])
-			 {
-				 int tmp = arr[i - 1];
-				 arr[i - 1] = arr[i];
-				 arr[i] = tmp;
-			 }
-		 }
-		 left++;
-	 }
- }
